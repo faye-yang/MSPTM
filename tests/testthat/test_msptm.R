@@ -4,7 +4,7 @@ library(visualTest)
 context("msptm")
 
 # ==== BEGIN SETUP AND PREPARE =================================================
-load(system.file("extdata/testdata",".Rdata",package="msptm")) 
+load(system.file("",".Rdata",package="MSPTM")) 
 #get the package to the right address
 #alt(option) + cursor(shubiao) can select multiple line or eddit multiple line at the same time
 
@@ -37,10 +37,6 @@ test_that("a sample input prouces the expected output from helper function get_p
 })
 
 
-test_that("a sample input prouces the expected output",  {
-  expect_equal(lseq(1,10, length.out = 5), tmp)
-  
-})
 
 
 
