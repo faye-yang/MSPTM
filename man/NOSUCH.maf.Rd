@@ -18,8 +18,8 @@ Description of the data ....
 }
 \examples{
 \dontrun{
-system.file("data", "NOSUCH.maf", package="rpt")
-fPath <- system.file("data", "NOSUCH.maf", package="rpt")
+system.file('data', 'NOSUCH.maf', package='rpt')
+fPath <- system.file('data', 'NOSUCH.maf', package='rpt')
 myExample <- read.delim(fPath, stringsAsFactors = FALSE)
 }
 }
