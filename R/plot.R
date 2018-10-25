@@ -37,17 +37,25 @@ intensity_plot<- function(data,modification,mZmarker_ions){
         if(aa==as.character(modification$AA[index]) & (aa!="-")){
             #print("peptide:",peptide,"ptm object peptide:",ptm$peptideSequence)
             intensity[aa_index]<-ptm$markerIonIntensity[ptm$peptideSequence==peptide][num_modi]
-
+            print(peptide)
+            print(ptm$markerIonIntensity)
+            
           }
         }
 
     }
     #plot:only the position has modification will have marker intensity
+    if( peptide %in% ptm$peptideSequence ){
     peptide_frame<-data.frame(pep_sequence=string2char[[1]],markerIonIntensity=intensity)
     print(peptide_frame)
-    ggplot(ptm, aes(x=ptm$pep_sequence,y=ptm$markerIonIntensity))+ 
-      #geom_bar(stat="identity", width = 0.5, fill="tomato2") + 
-      labs(title=paste("Post translational modification intensity for peptide", peptide, sep=" "))
+    p<- ggplot(ptm, aes(x=ptm$pep_sequence,y=ptm$markerIonIntensity))+ 
+        #geom_bar(stat="identity", width = 0.5, fill="tomato2") + 
+        labs(title=paste("Post translational modification intensity 
+                         for peptide", peptide, sep=" "))
+    print(p)
+    }
+    
+   
   }
 }
 
