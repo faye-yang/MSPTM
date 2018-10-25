@@ -1,5 +1,5 @@
 
-#' perl script comes from package protViz get rdatafile from a mascot output file
+#' refereence: perl script comes from package protViz get rdatafile from a mascot output file
 #'
 #' @param iput_file input file that is received from mascot
 #' @param oput_file a file that is readable by the protviz package
@@ -10,3 +10,5 @@ mascot_data<- function(iput_file,oput_file){
   system(get_data)
   return(oput_file)
 }
+
+# [END]
