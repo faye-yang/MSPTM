@@ -18,7 +18,7 @@ intensity_plot<- function(data,modification,mZmarker_ions){
     minMarkerIntensityRatio=5,
     PEAKPLOT =TRUE
   )
-  #dev.off()
+  dev.off()
   #print(ptm)
   
   #find the peptides that are modified
