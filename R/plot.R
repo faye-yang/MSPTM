@@ -1,14 +1,12 @@
-library(ggplot2)
-
-#' \code{dist_colour_plot} output graph of .
-#'A helper function of \code{tandem_get_data}
+#' \code{intensity_plot} output graph of intensity of amino acid.
 #'
 #' @param rdata mass spetrometry information for the peptide
 #' @param modification contain modification information , intensity of ion, amino acide that is modified
 #' @param mZmarkerIons maker ion 
 #' @export
 intensity_plot<- function(data,modification,mZmarker_ions){
-  ptm<-PTM_MarkerFinder(
+  png(filename="../ptm.png")
+  ptm<-PTM_MF(
     data,
     modification$mono,
     modification$desc,
@@ -18,8 +16,7 @@ intensity_plot<- function(data,modification,mZmarker_ions){
     minMarkerIntensityRatio=5,
     PEAKPLOT =TRUE
   )
-  dev.off()
-  #print(ptm)
+  
   
   #find the peptides that are modified
   
@@ -37,8 +34,8 @@ intensity_plot<- function(data,modification,mZmarker_ions){
         if(aa==as.character(modification$AA[index]) & (aa!="-")){
             #print("peptide:",peptide,"ptm object peptide:",ptm$peptideSequence)
             intensity[aa_index]<-ptm$markerIonIntensity[ptm$peptideSequence==peptide][num_modi]
-            print(peptide)
-            print(ptm$markerIonIntensity)
+            #print(peptide)
+            #print(ptm$markerIonIntensity)
             
           }
         }
@@ -48,11 +45,7 @@ intensity_plot<- function(data,modification,mZmarker_ions){
     if( peptide %in% ptm$peptideSequence ){
     peptide_frame<-data.frame(pep_sequence=string2char[[1]],markerIonIntensity=intensity)
     print(peptide_frame)
-    p<- ggplot(ptm, aes(x=ptm$pep_sequence,y=ptm$markerIonIntensity))+ 
-        #geom_bar(stat="identity", width = 0.5, fill="tomato2") + 
-        labs(title=paste("Post translational modification intensity 
-                         for peptide", peptide, sep=" "))
-    print(p)
+    
     }
     
    

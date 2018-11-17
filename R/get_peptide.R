@@ -3,6 +3,7 @@
 #'A helper function of \code{tandem_get_data}
 #'
 #' @param root a root of xml file
+#' @param index  the numer of analysis 
 #' @return A character vector.
 #' @export
 get_peptide <- function(root, index) {

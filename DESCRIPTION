@@ -17,7 +17,6 @@ Imports:
     rTANDEM,
     XML,
     tools,
-    ggplot2,
-    roxygen2
+    ggplot2
 Suggests:
     testthat
