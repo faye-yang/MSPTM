@@ -15,7 +15,7 @@
 #' tandem_get_data(result.file,modification)
 #' @export
 tandem_get_data<-function(result,modification,uids){
-
+  
   #get PTM of interest
   #unique uid
   ptm_info <- data.frame(Uid=c(), Type = c(),At=c(),Sequence=c(), Pep_ids=c())
@@ -46,58 +46,58 @@ tandem_get_data<-function(result,modification,uids){
 #' get_modified(uid=4,modification)
 
 get_modified<-function(uid,modification,result.file){
-    #number of modification
-    print(uid)
-    peptides <- GetPeptides(protein.uid=uid, results =result.file, expect =0.05 )
-    check<-is.na(peptides$ptm.type)
-    peptides<-peptides[!check]
-    if(all(check)){
-      print("all NA")
-      ptm <- data.frame(Uid=c(), Type = c(),At=c(),Sequence=c(), Pep_ids=c())
-      return(ptm)
+  #number of modification
+  print(uid)
+  peptides <- GetPeptides(protein.uid=uid, results =result.file, expect =0.05 )
+  check<-is.na(peptides$ptm.type)
+  peptides<-peptides[!check]
+  if(all(check)){
+    print("all NA")
+    ptm <- data.frame(Uid=c(), Type = c(),At=c(),Sequence=c(), Pep_ids=c())
+    return(ptm)
+  }
+  peptides <- peptides[peptides$ptm.type == modification$AA]
+  pep_ids<-peptides$pep.id
+  #initiate all attributes
+  protein_id<-c()
+  at<-c()
+  type<-c() 
+  sequence<-c()
+  pep_ids<-c()
+  num_modification <-length(peptides$ptm.at)
+  for(i in 1:num_modification){
+    #update empty lists
+    if(is.null(at)){
+      #update attributes
+      protein_id<-c(protein_id,uid)
+      index<- peptides$ptm.at[i]-peptides$start.position[i] +1
+      at<-c(at,index)
+      type<-c(type,peptides$ptm.type[i])
+      sequence<-c(sequence,peptides$sequence[i])
+      pep_ids<-c(pep_ids,peptides$pep.id[i])
     }
-    peptides <- peptides[peptides$ptm.type == modification$AA]
-    pep_ids<-peptides$pep.id
-    #initiate all attributes
-    protein_id<-c()
-    at<-c()
-    type<-c() 
-    sequence<-c()
-    pep_ids<-c()
-    num_modification <-length(peptides$ptm.at)
-    for(i in 1:num_modification){
-      #update empty lists
-      if(is.null(at)){
+    else{
+      index<- peptides$ptm.at[i]-peptides$start.position[i] +1 
+      check_dup_loca<-(at==index)
+      #one location can only have one modification.
+      if(!any(check_dup_loca)){
         #update attributes
         protein_id<-c(protein_id,uid)
-        index<- peptides$ptm.at[i]-peptides$start.position[i] +1
+        #the modification index of sequence: modification index of 
+        #whole sequence- its start index
         at<-c(at,index)
         type<-c(type,peptides$ptm.type[i])
         sequence<-c(sequence,peptides$sequence[i])
         pep_ids<-c(pep_ids,peptides$pep.id[i])
-      }
-      else{
-        index<- peptides$ptm.at[i]-peptides$start.position[i] +1 
-        check_dup_loca<-(at==index)
-        #one location can only have one modification.
-        if(!any(check_dup_loca)){
-          #update attributes
-          protein_id<-c(protein_id,uid)
-          #the modification index of sequence: modification index of 
-          #whole sequence- its start index
-          at<-c(at,index)
-          type<-c(type,peptides$ptm.type[i])
-          sequence<-c(sequence,peptides$sequence[i])
-          pep_ids<-c(pep_ids,peptides$pep.id[i])
-         
-        }
+        
       }
     }
-    
-    ptm<-data.frame(Uid=protein_id, Type = type,At=at,Sequence=sequence, Pep_ids=pep_ids)
-    return(ptm)
+  }
+  
+  ptm<-data.frame(Uid=protein_id, Type = type,At=at,Sequence=sequence, Pep_ids=pep_ids)
+  return(ptm)
   
 }
-  
+
 
 # [END]
