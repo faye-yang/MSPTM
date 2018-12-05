@@ -1,23 +1,27 @@
-#R
+
 
 # reference: http://fgcz-svn.unizh.ch/repos/fgcz/testing/proteomics/R/protViz/R/PTM_MarkerFinder.R $
 # $Id: PTM_MarkerFinder.R 6318 2014-04-02 13:02:51Z cpanse $
 # modified from protviz without the error and adjust the margin
 
 
-#' \code{dist_colour_plot} output graph of .
-#'A helper function of \code{tandem_get_data}
+#' \code{PTM_MF} output graph of .
+#'A helper function of intensity_plot
 #'
-#' @param rdata mass spetrometry information for the peptide
+#' @param data mass spetrometry information for the peptide
 #' @param modification contain modification information , intensity of ion, amino acide that is modified
+#' @param modi_name name of modification
 #' @param mZmarkerIons maker ion 
-#ptm<-PTM_MF( data,modification$mono,
-#  modification$desc, mZmarker_ions,minNumberIons=2,
-#  itol_ppm=10,minMarkerIntensityRatio=5,PEAKPLOT =TRUE)
+#' @param itol_ppm ppm
+#' @param minMarkerIntensityRatio minimum ratio for marker ion intensity 
+#' @param mgfFilename mgf file name indicator
+#' @param PEAKPLOT peak plot for MTP 
+#' @param minNumberIons minimum number or marker ion
 
-PTM_MF <- function(data, 
+
+PTM_MF<-function(data, 
                    modification, 
-                   modificationName, 
+                   modi_name, 
                    mZmarkerIons, 
                    minNumberIons=2, 
                    itol_ppm=10, 
@@ -28,7 +32,7 @@ PTM_MF <- function(data,
   if(!PEAKPLOT){
     .PTM_MarkerFinder_no_peakplot(data, 
                                   modification,
-                                  modificationName,
+                                  modi_name,
                                   mZmarkerIons, 
                                   minNumberIons, 
                                   itol_ppm,
@@ -105,8 +109,9 @@ PTM_MF <- function(data,
         peakplot(data[[i]]$peptideSequence, 
                  spec=data[[i]], fi=fi.by, ion.axes=FALSE,  
                  main=paste("scantype: HCD / peptide sequence: ", 
-                            .PTM_MarkerFinder_(data[[i]]$peptideSequence, data[[i]]$modification, modificationName), sep=''),
+                            .PTM_MarkerFinder_(data[[i]]$peptideSequence, data[[i]]$modification, modi_name), sep=''),
                  xlim=c(0,max(data[[i]]$mZ)))
+       
       }else{
         par(cex=0.75,mar=c(1,1,1,1))
         plot(data[[i]]$mZ, data[[i]]$intensity, type='h',
@@ -116,16 +121,16 @@ PTM_MF <- function(data,
              sub=paste(i, data[[i]]$title))
       }
       
-      #points(data[[i]]$mZ[idx[b]],
-      #       data[[i]]$intensity[idx[b]], 
-      #       pch=22,
-      #       col='#6CC417AA', 
-      #       bg='#6CC417AA', 
-      #       cex=1)
+      points(data[[i]]$mZ[idx[b]],
+             data[[i]]$intensity[idx[b]], 
+             pch=22,
+             col='#6CC417AA', 
+             bg='#6CC417AA', 
+             cex=1)
       
-      legend("topright", paste(c('protein', 'm/z', 'charge', 'ionScore', 'query#'), 
+      legend("topright", paste(c('protein', 'm/z', 'charge', 'ionScore', 'query#','xlab','ylab'), 
                                c(data[[i]]$proteinInformation, 
-                                 data[[i]]$pepmass, data[[i]]$charge, data[[i]]$mascotScore,i)), cex=0.75)
+                                 data[[i]]$pepmass, data[[i]]$charge, data[[i]]$mascotScore,i,'m/z','intensity')), cex=0.75)
       
       
       ################################################################################
@@ -154,16 +159,17 @@ PTM_MF <- function(data,
           par(mar=c(1,1,1,1))
           p<-peakplot(data[[k]]$peptideSequence, spec=data[[k]], 
                       main=paste("scantype: ETD / peptide sequence: ",
-                                 .PTM_MarkerFinder_(data[[k]]$peptideSequence, data[[k]]$modification, modificationName), sep=''),
+                                 .PTM_MarkerFinder_(data[[k]]$peptideSequence, data[[k]]$modification, modi_name), sep=''),
                       fi=fi.cyz,
                       itol=0.6,
                       xlim=c(0, max(data[[i]]$mZ)),
                       ion.axes=FALSE)
           PLOTFLAG<-TRUE
           
-          legend("topleft", paste(c('protein', 'm/z', 'charge', 'ionScore', 'query#'), 
+          
+          legend("topleft", paste(c('protein', 'm/z', 'charge', 'ionScore', 'query#','xlab','ylab'), 
                                   c(data[[k]]$proteinInformation, 
-                                    data[[k]]$pepmass, data[[k]]$charge, data[[k]]$mascotScore, k)), cex=0.75)
+                                    data[[k]]$pepmass, data[[k]]$charge, data[[k]]$mascotScore, k, 'm/z','intensity')), cex=0.75)
           break;
         }
         j <- j+1
@@ -179,29 +185,18 @@ PTM_MF <- function(data,
       
       ################################################################################
       
-      #par(mar=c(1,1,1,1))
-      #plot(mZmarkerIons, (mZmarkerIons-data[[i]]$mZ[idx]),
-      #plot(mZmarkerIons[b], 1e+06 * (mZmarkerIons[b]-data[[i]]$mZ[idx[b]])/data[[i]]$mZ[idx[b]],
-      #     axes=TRUE,type='p', xlab='m/z',ylab='ppm error',log='')# ylim=c(-max(ppm.error),max(ppm.error)))
-      #axis(3, mZmarkerIons[b], round(mZmarkerIons[b],1),las=2)
-      #abline(h=0.0, col='grey')
-      
-      ################################################################################
-      ####### P A T T E R N P L O T ##################################################
-      dev.new()
       par(mar=c(1,1,1,1))
-      plot(data[[i]]$mZ[idx[b]],
-           data[[i]]$intensity[idx[b]],
-           col='#6CC417AA', 
-           lwd=2, 
-           type='h',
-           xlab='m/z',
-           ylab='Intensity',
-           axes=TRUE)
-      axis(3,data[[i]]$mZ[idx[b]],round(data[[i]]$mZ[idx[b]],1), las=2)
+      plot(mZmarkerIons, (mZmarkerIons-data[[i]]$mZ[idx]),
+      plot(mZmarkerIons[b], 1e+06 * (mZmarkerIons[b]-data[[i]]$mZ[idx[b]])/data[[i]]$mZ[idx[b]],
+           axes=TRUE,type='p', xlab='m/z',ylab='ppm error',log=''), ylim=c(-max(ppm.error),max(ppm.error)))
+      axis(3, mZmarkerIons[b], round(mZmarkerIons[b],1),las=2)
+      abline(h=0.0, col='grey')
+      legend("topright", paste(c('xlab','ylab'), 
+                               c('m/z for maker Ion','ppm error')), cex=0.75)
       
-      # readline("Press <Enter> to continue")
       
+      
+    
     }
   }
   
@@ -227,6 +222,12 @@ PTM_MF <- function(data,
   writeLines(paste("# ",date(),sep=''), FILE)
   close(FILE)
 }
+#' \code{.PTM_MarkerFinder_writeMGF} a helper function to find marker ion
+#'
+#' @param spec spectrum of peptides 
+#' @param mgfFilename file name of the MGF 
+#' @param pattern indicator for pattern plot
+#' 
 
 .PTM_MarkerFinder_writeMGF <- function(spec, mgfFilename, pattern=-1){
   FILE <- file(mgfFilename, "a")
@@ -246,9 +247,11 @@ PTM_MF <- function(data,
 }
 
 #' \code{.PTM_MarkerFinder_} a helper function if peakplot option is FALSE .
-#'
-#.PTM_MarkerFinder_()
-.PTM_MarkerFinder_ <- function(peptideSequence, modification, modificationName){
+#' @param modification contain modification information , intensity of ion, amino acide that is modified
+#' @param modi_name name of modification
+#' @param peptideSequence peptide sequence 
+
+.PTM_MarkerFinder_ <- function(peptideSequence, modification, modi_name){
   
   result <- as.character()
   
@@ -259,15 +262,25 @@ PTM_MF <- function(data,
   for (i in 1:n){
     result<-paste(result, seq[i], sep='')
     if (mod[i+1] > 0){
-      result<-paste(result,'[', modificationName[mod[i+1]+1], ']', sep='')
+      result<-paste(result,'[', modi_name[mod[i+1]+1], ']', sep='')
     }
   }
   return(result)
 }
+#' \code{.PTM_MarkerFinder_no_peakplot} a helper function 
+#' for no peak plot option
+#' @param data mass spetrometry information for the peptide
+#' @param modification contain modification information , intensity of ion, amino acide that is modified
+#' @param modi_name name of modification
+#' @param mZmarkerIons maker ion 
+#' @param minNumberIons minimum number of marker ion
+#' @param itol_ppm ppm
+#' @param minMarkerIntensityRatio minimum ratio for marker ion intensity 
+
 
 .PTM_MarkerFinder_no_peakplot<-function(data, 
                                         modification,
-                                        modificationName,
+                                        modi_name,
                                         mZmarkerIons, 
                                         minNumberIons=2, 
                                         itol_ppm=10, 
@@ -287,7 +300,7 @@ PTM_MF <- function(data,
       par(mar=c(1,1,1,1))
       plot(x$mZ, x$intensity, type='h', xlab='m/z',ylab='Intensity', xlim=c(0, max(x$mZ)), sub=paste(x$title))
       points(x$mZ[idx[b]], x$intensity[idx[b]], pch=22, col='#6CC417AA', bg='#6CC417AA', cex=1)
-      legend("topright", paste(c('query', 'pepmass', 'charge'), c(x$id, x$pepmass, x$charge)), cex=0.75)
+      legend("topright", paste(c('query', 'pepmass', 'charge','xlab','ylab'), c(x$id, x$pepmass, x$charge,'m/z','intensity')), cex=0.75)
       
       ################################################################################
       
@@ -298,21 +311,19 @@ PTM_MF <- function(data,
       axis(3, mZmarkerIons[b], round(mZmarkerIons[b],1),las=2)
       abline(h=0.0, col='grey')
       
-      ################################################################################
-      ####### P A T T E R N P L O T ##################################################
+     
+      #########  Pattern plot############
       par(mar=c(1,1,1,1))
-      plot(x$mZ[idx[b]],
-           x$intensity[idx[b]],
+      plot(data[[i]]$mZ[idx[b]],
+           data[[i]]$intensity[idx[b]],
            col='#6CC417AA', 
            lwd=2, 
            type='h',
            xlab='m/z',
            ylab='Intensity',
            axes=TRUE)
-      axis(3, x$mZ[idx[b]],round(x$mZ[idx[b]],1), las=2)
-      
-      # readline("Press <Enter> to continue")
-      
+      axis(3,data[[i]]$mZ[idx[b]],round(data[[i]]$mZ[idx[b]],1), las=2)
+      legend("topright", paste(c('xlab','ylab'), c(,'m/z for maker ion','intensity')), cex=0.75)
     }
     
   }
