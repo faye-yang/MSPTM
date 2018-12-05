@@ -9,14 +9,17 @@ Description: R Package of visualization of post-translation-modification
 License: file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 YEAR: 2018
 Imports:
+    ggplot2,
     protViz,
-    randomcoloR,
     rTANDEM,
-    XML,
-    tools,
-    ggplot2
+    colourpicker,
+    shiny
 Suggests:
-    testthat
+    testthat,
+    knitr,
+    rmarkdown,
+    BiocCheck
+VignetteBuilder: knitr
