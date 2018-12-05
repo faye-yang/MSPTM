@@ -16,7 +16,7 @@
 .onAttach <- function(libname, pkgname) {
     # Startup message
     m <- character()
-    m[1] <- "\nWelcome to <your package name>.\n"
+    m[1] <- "\nWelcome to MSPTM.\n"
     
     packageStartupMessage(paste(m, collapse = ""))
 }
