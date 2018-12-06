@@ -9,7 +9,7 @@
 #' @param modification modification information that are investigated
 #' @param uids proteins id that you want to investigate
 #' @return A numeric vector.
-#' @examples
+#'
 #' modification<-data.frame("type"=c("Carbamidomethyl","Oxidation")
 #' ,"monomass"=c(57.022, 16.0), "AA"=c("C","M"))
 #' tandem_get_data(result.file,modification)
@@ -39,7 +39,7 @@ tandem_get_data<-function(result,modification,uids){
 #' @param result.file full information of x!tandem search engine return
 #' @return A dataframe that contain protein's uid, sequence, location of modification, 
 #' type of modification.
-#'  @examples
+#'  
 #'  modification<-data.frame("type"=c("Carbamidomethyl","Oxidation"),
 #'  "monomass"=c(57.022, 16.0), "AA"=c("C","M"))
 #' get_modified(uid=4,modification)
@@ -51,7 +51,7 @@ get_modified<-function(uid,modification,result.file){
   peptides<-peptides[!check]
   #all NA so do not analyze it
   if(all(check)){
-    
+   
     ptm <- data.frame(Uid=c(), Type = c(),At=c(),Sequence=c(), Pep_ids=c())
     return(ptm)
   }

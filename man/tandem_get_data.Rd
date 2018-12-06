@@ -17,13 +17,12 @@ peptide sequence, protein information, modification}
 }
 \value{
 A numeric vector.
+
+modification<-data.frame("type"=c("Carbamidomethyl","Oxidation")
+,"monomass"=c(57.022, 16.0), "AA"=c("C","M"))
+tandem_get_data(result.file,modification)
 }
 \description{
 transform the rtandem output file to a data variables that can be accepted by 
 PTM_finderfunction.
-}
-\examples{
-modification<-data.frame("type"=c("Carbamidomethyl","Oxidation")
-,"monomass"=c(57.022, 16.0), "AA"=c("C","M"))
-tandem_get_data(result.file,modification)
 }

@@ -17,7 +17,7 @@ get_modified(uid, modification, result.file)
 \value{
 A dataframe that contain protein's uid, sequence, location of modification, 
 type of modification.
- @examples
+ 
  modification<-data.frame("type"=c("Carbamidomethyl","Oxidation"),
  "monomass"=c(57.022, 16.0), "AA"=c("C","M"))
 get_modified(uid=4,modification)
