@@ -41,6 +41,8 @@ intensity_plot(data=HexNAc,modification = m,mZmarker_ions=HexNAc_MarkerIons,sear
 
 modification<-data.frame("type"=c("Carbamidomethyl","Oxidation"),
                          "monomass"=c(57.022, 16.0), "AA"=c("C","M"))
+
+unzip("./inst/extdata/output_mouse.2018_12_04_19_57_17.t.xml.zip",exdir="./inst/extdata")
 result.file <- "./inst/extdata/output_mouse.2018_12_04_19_57_17.t.xml"
 uids<-c(12,2,731)
 result <- GetResultsFromXML(result.file)
