@@ -21,8 +21,7 @@ tandem_get_data<-function(result,modification,uids){
   ptm_info <- data.frame(Uid=c(), Type = c(),At=c(),Sequence=c(), Pep_ids=c())
   unique_uids<-unique(uids)
   for(uid in unique_uids){
-    print("iterato")
-    print(uid)
+    #update dataframe
     ptm_info<-rbind(ptm_info,get_modified(uid,modification,result))
     
   }
@@ -47,12 +46,12 @@ tandem_get_data<-function(result,modification,uids){
 
 get_modified<-function(uid,modification,result.file){
   #number of modification
-  print(uid)
   peptides <- GetPeptides(protein.uid=uid, results =result.file, expect =0.05 )
   check<-is.na(peptides$ptm.type)
   peptides<-peptides[!check]
+  #all NA so do not analyze it
   if(all(check)){
-    print("all NA")
+    
     ptm <- data.frame(Uid=c(), Type = c(),At=c(),Sequence=c(), Pep_ids=c())
     return(ptm)
   }
